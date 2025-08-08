@@ -1,19 +1,19 @@
-import React from "react";
-import { AppBar, Toolbar, Typography, Button } from "@mui/material";
+import React from 'react';
+import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 
-export default function Header({ onLoginClick }) {
+const Header = ({ onLoginClick }) => {
   return (
     <AppBar position="static" color="transparent" elevation={0}>
-      <Toolbar sx={{ justifyContent: "space-between" }}>
-        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+      <Toolbar>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           TaskFlow
         </Typography>
-        {onLoginClick && (
-          <Button variant="outlined" onClick={onLoginClick}>
-            Login
-          </Button>
-        )}
+        <Button color="inherit" onClick={onLoginClick}>
+          Login
+        </Button>
       </Toolbar>
     </AppBar>
   );
-}
+};
+
+export default Header;

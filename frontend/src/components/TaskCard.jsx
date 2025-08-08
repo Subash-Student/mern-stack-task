@@ -1,46 +1,57 @@
-import React from "react";
-import { Card, CardContent, Typography, Chip, Tooltip, Stack } from "@mui/material";
+import React, { useState } from 'react';
+import {
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  useTheme,
+} from '@mui/material';
 
-export default function TaskCard({ task }) {
-  const dueColor = new Date(task.due) < new Date() ? "error" : "success";
+const TaskCard = ({ task, onClick }) => {
+  const theme = useTheme();
+  const [isHovered, setIsHovered] = useState(false);
 
-  const formatDate = (dateStr) => {
-    if (!dateStr) return "-";
-    const date = new Date(dateStr);
-    return date.toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric"
-    });
+  const getDueDateColor = (date) => {
+    const now = new Date();
+    const dueDate = new Date(date);
+    const diffTime = dueDate.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays <= 3 && diffDays >= 0) return theme.palette.success.main;
+    if (diffDays < 0) return theme.palette.error.main;
+    return theme.palette.primary.main;
   };
 
+  const dueDateColor = getDueDateColor(task.dueDate);
+
   return (
-    <Tooltip title={task.description} arrow>
-      <Card sx={{ mt: 1 }}>
-        <CardContent>
-          <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-            {task.title}
+    <Card
+      sx={{
+        mb: 2,
+        cursor: 'pointer',
+        borderLeft: `5px solid ${dueDateColor}`,
+        transition: 'transform 0.2s',
+        '&:hover': {
+          transform: 'scale(1.02)',
+          boxShadow: theme.shadows[4],
+        },
+      }}
+      onClick={() => onClick(task)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <CardContent>
+        <Typography variant="subtitle1" component="h3">
+          {task.title}
+        </Typography>
+        {isHovered && (
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+            {task.description}
           </Typography>
-
-          {/* Due Date Chip */}
-          <Chip
-            label={`Due: ${formatDate(task.due)}`}
-            color={dueColor}
-            size="small"
-            sx={{ mt: 1 }}
-          />
-
-          {/* Created / Updated Dates */}
-          <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
-            <Typography variant="caption" color="text.secondary">
-              Created: {formatDate(task.createdAt)}
-            </Typography>
-            <Typography variant="caption" color="text.secondary">
-              Updated: {formatDate(task.updatedAt)}
-            </Typography>
-          </Stack>
-        </CardContent>
-      </Card>
-    </Tooltip>
+        )}
+      </CardContent>
+    </Card>
   );
-}
+};
+
+export default TaskCard;

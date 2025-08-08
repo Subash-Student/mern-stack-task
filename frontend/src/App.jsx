@@ -1,13 +1,35 @@
-import React, { useState } from "react";
-import LandingPage from "./components/LandingPage";
-import Dashboard from "./components/Dashboard";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LandingPage from './pages/LandingPage';
+import DashboardPage from './pages/DashboardPage';
+import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 
-export default function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#5e35b1',
+    },
+    secondary: {
+      main: '#7e57c2',
+    },
+  },
+  typography: {
+    fontFamily: ['Poppins', 'sans-serif'].join(','),
+  },
+});
 
-  return loggedIn ? (
-    <Dashboard onLogout={() => setLoggedIn(false)} />
-  ) : (
-    <LandingPage onLoginSuccess={() => setLoggedIn(true)} />
+function App() {
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 }
+
+export default App;
