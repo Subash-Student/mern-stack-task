@@ -10,7 +10,7 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL;
 // Create the provider component
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState(sessionStorage.getItem("token"));
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -77,6 +77,7 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
+    token
   };
 
   return (

@@ -5,6 +5,7 @@ import { AuthProvider } from './context/AuthContext'; // Import the AuthProvider
 import LandingPage from './pages/LandingPage';
 import DashboardPage from './pages/DashboardPage';
 import { ToastContainer } from 'react-toastify';
+import ProtectedRoute from './components/src/components/ProtectedRoute';
 
 const theme = createTheme({
   palette: {
@@ -29,7 +30,9 @@ function App() {
         <AuthProvider>  {/* Wrap the Routes with AuthProvider */}
           <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/dashboard" element={<DashboardPage />} />
+            </Route>
           </Routes>
         </AuthProvider>
       </Router>
