@@ -14,7 +14,7 @@ const app = express();
 // Middleware
 app.use(express.json()); // Parse JSON request body
 app.use(cors({
-    origin:"",
+    origin:"https://task-flow-orpin.vercel.app",
     methods: 'GET,PUT,POST,DELETE',
     allowedHeaders: '*',
     credentials: true,
