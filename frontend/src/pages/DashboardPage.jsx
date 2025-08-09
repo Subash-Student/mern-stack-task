@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import { Box, Fab } from '@mui/material';
+import React, { useState, useContext } from 'react';
+import { Box, Fab, Grid, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DashboardHeader from '../components/DashboardHeader';
-import KanbanColumn from '../components/KanbanColumn';
+import TaskCard from '../components/TaskCard';
 import TaskModal from '../components/TaskModal';
 import TaskCreationModal from '../components/TaskCreationModal';
 import { dummyTasks } from '../dummyData';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import { TaskContext } from '../context/TaskContext';
 
 const DashboardPage = () => {
   const navigate = useNavigate();
@@ -16,6 +17,9 @@ const DashboardPage = () => {
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [isCreationModalOpen, setIsCreationModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Get filter options from TaskContext
+  const { filterOption } = useContext(TaskContext);
 
   const handleTaskClick = (task) => {
     setSelectedTask(task);
@@ -36,7 +40,7 @@ const DashboardPage = () => {
   };
 
   const handleCreateTask = (newTaskData) => {
-    const newTask = { ...newTaskData, id: uuidv4() };
+    const newTask = { ...newTaskData, id: uuidv4(), status: 'Pending' };
     setTasks([...tasks, newTask]);
   };
 
@@ -48,22 +52,44 @@ const DashboardPage = () => {
     setSearchQuery(query.toLowerCase());
   };
 
-  const filteredTasks = tasks.filter(task =>
-    task.title.toLowerCase().includes(searchQuery) ||
-    task.description.toLowerCase().includes(searchQuery)
-  );
+  // Apply both search and filter
+  const filteredTasks = tasks.filter(task => {
+    const matchesSearch =
+      task.title.toLowerCase().includes(searchQuery) ||
+      task.description.toLowerCase().includes(searchQuery);
 
-  const pendingTasks = filteredTasks.filter(task => task.status === 'Pending');
-  const inProgressTasks = filteredTasks.filter(task => task.status === 'In-Progress');
-  const completedTasks = filteredTasks.filter(task => task.status === 'Completed');
+    const matchesStatus =
+      !filterOption.status || task.status === filterOption.status;
+
+    const matchesDueDate =
+      !filterOption.dueDate || task.dueDate === filterOption.dueDate;
+
+    return matchesSearch && matchesStatus && matchesDueDate;
+  });
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', bgcolor: '#f4f5f7' }}>
       <DashboardHeader onLogout={handleLogout} onSearch={handleSearch} />
-      <Box sx={{ p: 4, flexGrow: 1, display: 'flex', gap: 3, overflowX: 'auto' }}>
-        <KanbanColumn status="Pending" tasks={pendingTasks} onTaskClick={handleTaskClick} />
-        <KanbanColumn status="In-Progress" tasks={inProgressTasks} onTaskClick={handleTaskClick} />
-        <KanbanColumn status="Completed" tasks={completedTasks} onTaskClick={handleTaskClick} />
+      
+      <Box sx={{ p: 4, flexGrow: 1, overflowY: 'auto' }}>
+        <Typography variant="h4" gutterBottom>
+          All Tasks
+        </Typography>
+        <Grid container spacing={3}>
+          {filteredTasks.length > 0 ? (
+            filteredTasks.map((task) => (
+              <Grid item xs={12} sm={6} md={4} lg={3} key={task.id}>
+                <TaskCard task={task} onClick={handleTaskClick} />
+              </Grid>
+            ))
+          ) : (
+            <Grid item xs={12}>
+              <Typography variant="h6" color="text.secondary" align="center">
+                No tasks found.
+              </Typography>
+            </Grid>
+          )}
+        </Grid>
       </Box>
 
       {selectedTask && (

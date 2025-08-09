@@ -6,6 +6,7 @@ import LandingPage from './pages/LandingPage';
 import DashboardPage from './pages/DashboardPage';
 import { ToastContainer } from 'react-toastify';
 import ProtectedRoute from './components/src/components/ProtectedRoute';
+import { TaskProvider } from './context/TaskContext';
 
 const theme = createTheme({
   palette: {
@@ -27,13 +28,15 @@ function App() {
       <CssBaseline />
       <ToastContainer />     
        <Router>
-        <AuthProvider>  {/* Wrap the Routes with AuthProvider */}
+        <AuthProvider>
+          <TaskProvider>
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<DashboardPage />} />
             </Route>
           </Routes>
+          </TaskProvider>
         </AuthProvider>
       </Router>
     </ThemeProvider>
