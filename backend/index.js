@@ -13,7 +13,12 @@ const app = express();
 
 // Middleware
 app.use(express.json()); // Parse JSON request body
-app.use(cors());         // Enable CORS
+app.use(cors({
+    origin:"",
+    methods: 'GET,PUT,POST,DELETE',
+    allowedHeaders: '*',
+    credentials: true,
+}));        
 
 // Routes
 app.use('/api/users', userRouter); // User auth routes
