@@ -1,45 +1,61 @@
 
-## LIVE URL : https://task-flow-orpin.vercel.app
+🚀 Live Demo
 
----
+URL: https://task-flow-orpin.vercel.app
 
-## ⚙️ Setup Instructions
+⚙️ Setup Instructions
 
-> **Note:** `.env` files for both backend and frontend are already included in this repository for convenience.
+✅ Note: .env files for both frontend and backend are already included in this repository for convenience.
 
-### 1️⃣ Clone the repository
-```bash
+📦 1. Clone the Repository
+
 git clone https://github.com/Subash-Student/mern-stack-task.git
 cd mern-stack-task
 
-### 1️⃣ Run the Backend
+🔧 2. Run the Backend
+
 cd backend
 npm install
 npm run server
 
-### 1️⃣ Run the Frontend
+🎨 3. Run the Frontend
+
 cd frontend
 npm install
 npm run dev
 
+🛠 Tech Stack
 
-### 🛠 Tech Stack
+🌐 Frontend
 
-**Frontend:**
-- React
-- Material UI
-- Axios
-- React Router DOM
-- React Toastify
+React
 
-**Backend:**
-- Node.js
-- Express.js
-- MongoDB 
-- bcrypt
-- jsonwebtoken
-- dotenv
+Material UI
 
-**Deployment:**
-- Frontend → Vercel
-- Backend → Vercel
+Axios
+
+React Router DOM
+
+React Toastify
+
+🔙 Backend
+
+Node.js
+
+Express.js
+
+MongoDB
+
+bcrypt
+
+jsonwebtoken
+
+dotenv
+
+🚢 Deployment
+
+Frontend: Vercel
+
+Backend: Vercel
+
+Let me know if you'd like to add sections for features, screenshots, or contribution guidelines. I can help you polish it even further!
