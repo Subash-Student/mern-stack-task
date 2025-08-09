@@ -9,7 +9,7 @@ const Header = ({ onLoginClick }) => {
           TaskFlow
         </Typography>
         <Button color="inherit" onClick={onLoginClick}>
-          Login
+          Register
         </Button>
       </Toolbar>
     </AppBar>

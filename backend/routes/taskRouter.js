@@ -13,3 +13,4 @@ taskRouter.route('/:id')
     .put(protect, updateTask)     // Protected route to update a task
     .delete(protect, deleteTask); // Protected route to delete a task
 
+export default taskRouter;

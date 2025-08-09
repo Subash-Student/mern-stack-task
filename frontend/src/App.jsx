@@ -1,8 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import { AuthProvider } from './context/AuthContext'; // Import the AuthProvider
 import LandingPage from './pages/LandingPage';
 import DashboardPage from './pages/DashboardPage';
-import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import { ToastContainer } from 'react-toastify';
 
 const theme = createTheme({
   palette: {
@@ -22,11 +24,14 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Router>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
-        </Routes>
+      <ToastContainer />     
+       <Router>
+        <AuthProvider>  {/* Wrap the Routes with AuthProvider */}
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+          </Routes>
+        </AuthProvider>
       </Router>
     </ThemeProvider>
   );

@@ -15,28 +15,22 @@ export const registerUser = async (req, res) => {
     // Added 'username' to the request body destructuring
     const { username, email, password } = req.body;
 
-    // Simple validation (Joi handles most of this now, but it's good practice to keep some)
-    if (!username || !email || !password) {
-        return res.status(400).json({ message: 'Please enter all fields' });
-    }
-
     // Check for existing user by email or username
     const userExists = await User.findOne({ $or: [{ email }, { username }] });
     if (userExists) {
-        return res.status(400).json({ message: 'User with that email or username already exists' });
+        return res.status(400).json({success:false, message: 'User with that email or username already exists' });
     }
 
     // Create a new user with the username
     const user = await User.create({ username, email, password });
     if (user) {
         res.status(201).json({
-            _id: user._id,
-            username: user.username,
-            email: user.email,
+            success:true,
             token: generateToken(user._id),
+            message: 'Successfully Registered!'
         });
     } else {
-        res.status(400).json({ message: 'Invalid user data' });
+        res.status(400).json({success:false, message: 'Invalid user data' });
     }
 };
 
@@ -50,12 +44,12 @@ export const loginUser = async (req, res) => {
     const user = await User.findOne({ email });
     if (user && (await user.matchPassword(password))) {
         res.json({
-            _id: user._id,
-            email: user.email,
+            success:true,
             token: generateToken(user._id),
+            message: 'Successfully Loged In!'
         });
     } else {
-        res.status(401).json({ message: 'Invalid email or password' });
+        res.status(401).json({ success:false,message: 'Invalid email or password' });
     }
 };
 

@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Box, Typography, Button, TextField, Paper } from '@mui/material';
 import img from '../assets/img.jpg'; // Import the image file
+import { AuthContext } from '../context/AuthContext';
+import {toast} from "react-toastify"
 
 const Hero = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSignUp = (e) => {
+  const {login} = useContext(AuthContext);
+
+  const handleSignUp = async(e) => {
+
     e.preventDefault();
-    console.log('Sign Up with:', { email, password });
+
+    const result = await login(email, password);
+      if (result.success) {
+        onClose();
+      } else {
+        toast.error(result.error);
+      }
   };
 
   return (

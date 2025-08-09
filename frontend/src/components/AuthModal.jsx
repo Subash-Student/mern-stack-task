@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   Modal,
   Box,
@@ -9,6 +9,8 @@ import {
   Tab,
   Paper,
 } from '@mui/material';
+import { AuthContext } from '../context/AuthContext'; // Import the context
+import {toast} from "react-toastify"
 
 const style = {
   position: 'absolute',
@@ -23,26 +25,38 @@ const style = {
 };
 
 const AuthModal = ({ open, onClose }) => {
-  const [value, setValue] = useState(0); // 0 for Login, 1 for Sign Up
+  const [value, setValue] = useState(0);
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { login, register } = useContext(AuthContext); // Use the context
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    setUsername('');
     setEmail('');
     setPassword('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (value === 0) {
-      console.log('Login with:', { email, password });
-    } else {
-      console.log('Sign Up with:', { email, password });
-    }
-    onClose();
-  };
 
+    if (value === 0) { // Login
+      const result = await login(email, password);
+      if (result.success) {
+        onClose();
+      } else {
+        toast.error(result.error);
+      }
+    } else { // Register
+      const result = await register(username, email, password);
+      if (result.success) {
+        onClose();
+      } else {
+        toast.error(result.error);
+      }
+    }
+  };
   return (
     <Modal open={open} onClose={onClose}>
       <Paper sx={style}>
@@ -54,6 +68,18 @@ const AuthModal = ({ open, onClose }) => {
           <Typography variant="h6" align="center">
             {value === 0 ? 'Welcome Back!' : 'Join Today!'}
           </Typography>
+
+          {value === 1 && (
+            <TextField
+              label="Username"
+              type="text"
+              fullWidth
+              required
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          )}
+
           <TextField
             label="Email"
             type="email"

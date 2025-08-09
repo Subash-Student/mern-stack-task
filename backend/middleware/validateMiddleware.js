@@ -1,12 +1,23 @@
 import Joi from "joi";
 
 // Schema for user registration validation
-const userSchema = Joi.object({
+const registerSchema = Joi.object({
     // Added 'username' field with required and min length validation
     username: Joi.string().min(3).required().messages({
         'string.min': 'Username must be at least 3 characters long.',
         'any.required': 'Username is required.',
     }),
+    email: Joi.string().email({ tlds: { allow: false } }).required().messages({
+        'string.email': 'Please enter a valid email address.',
+        'any.required': 'Email is required.',
+    }),
+    password: Joi.string().min(6).required().messages({
+        'string.min': 'Password must be at least 6 characters long.',
+        'any.required': 'Password is required.',
+    }),
+});
+const loginSchema = Joi.object({
+   
     email: Joi.string().email({ tlds: { allow: false } }).required().messages({
         'string.email': 'Please enter a valid email address.',
         'any.required': 'Email is required.',
@@ -33,8 +44,15 @@ const taskSchema = Joi.object({
 });
 
 // Middleware function to validate user registration data
-export const validateUser = (req, res, next) => {
-    const { error } = userSchema.validate(req.body);
+export const validateRegisterUser = (req, res, next) => {
+    const { error } = registerSchema.validate(req.body);
+    if (error) {
+        return res.status(400).json({ message: error.details[0].message });
+    }
+    next();
+};
+export const validateLoginUser = (req, res, next) => {
+    const { error } = loginSchema.validate(req.body);
     if (error) {
         return res.status(400).json({ message: error.details[0].message });
     }
