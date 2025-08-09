@@ -21,3 +21,25 @@ npm run server
 cd frontend
 npm install
 npm run dev
+
+
+### 🛠 Tech Stack
+
+**Frontend:**
+- React
+- Material UI
+- Axios
+- React Router DOM
+- React Toastify
+
+**Backend:**
+- Node.js
+- Express.js
+- MongoDB 
+- bcrypt
+- jsonwebtoken
+- dotenv
+
+**Deployment:**
+- Frontend → Vercel
+- Backend → Vercel
