@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 import { AuthContext } from '../context/AuthContext';
 
-const Header = ({ onAuthClick }) => {
+const Header = ({ onLoginClick }) => {
   const { user, logout } = useContext(AuthContext);
 
   return (
@@ -17,7 +17,7 @@ const Header = ({ onAuthClick }) => {
             Logout
           </Button>
         ) : (
-          <Button color="inherit" onClick={onAuthClick}>
+          <Button color="inherit" onClick={onLoginClick}>
             Login / Register
           </Button>
         )}
