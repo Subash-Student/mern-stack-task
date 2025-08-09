@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Box, Typography, Button, TextField, Paper } from '@mui/material';
-import img from '../assets/img.jpg'; // Import the image file
+import img from '../assets/img.jpg';
 import { AuthContext } from '../context/AuthContext';
 import {toast} from "react-toastify"
 
@@ -41,7 +41,7 @@ const Hero = () => {
         <Typography variant="h5" color="text.secondary" paragraph>
           Simple and powerful task management to help you stay on track.
         </Typography>
-        {/* Render the img here */}
+       
         <Box
           component="img"
           src={img}

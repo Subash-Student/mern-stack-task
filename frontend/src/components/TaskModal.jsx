@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Modal,
   Box,
@@ -13,6 +13,8 @@ import {
   InputLabel,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { TaskContext } from '../context/TaskContext';
+
 
 const style = {
   position: 'absolute',
@@ -26,8 +28,9 @@ const style = {
   borderRadius: 2,
 };
 
-const TaskModal = ({ open, onClose, task, onSave, onDelete }) => {
-  const [editedTask, setEditedTask] = useState(task);
+const TaskModal = ({ open, onClose, task }) => {
+  const { updateTask, deleteTask } = useContext(TaskContext);
+  const [editedTask, setEditedTask] = useState(task || {});
 
   useEffect(() => {
     if (task) {
@@ -39,40 +42,43 @@ const TaskModal = ({ open, onClose, task, onSave, onDelete }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setEditedTask({ ...editedTask, [name]: value });
+    setEditedTask((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleStatusChange = (e) => {
-    setEditedTask({ ...editedTask, status: e.target.value });
+    setEditedTask((prev) => ({ ...prev, status: e.target.value }));
   };
 
-  const handleSave = () => {
-    onSave(editedTask);
+  const handleSave = async () => {
+    await updateTask(editedTask._id,editedTask);
     onClose();
   };
 
-  const handleDelete = () => {
-    onDelete(editedTask.id);
+  const handleDelete = async () => {
+    await deleteTask(editedTask._id);
     onClose();
   };
-
+console.log(editedTask)
   return (
     <Modal open={open} onClose={onClose}>
       <Paper sx={style}>
+        {/* Header */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
           <Typography variant="h5" component="h2">
-            {editedTask.title}
+            Edit Task
           </Typography>
           <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
         </Box>
+
+        
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <TextField
             label="Title"
             name="title"
             fullWidth
-            value={editedTask.title}
+            value={editedTask.title || ''}
             onChange={handleInputChange}
           />
           <TextField
@@ -81,31 +87,33 @@ const TaskModal = ({ open, onClose, task, onSave, onDelete }) => {
             fullWidth
             multiline
             rows={4}
-            value={editedTask.description}
+            value={editedTask.description || ''}
             onChange={handleInputChange}
           />
           <TextField
-            label="Due Date"
-            name="dueDate"
-            type="date"
-            fullWidth
-            InputLabelProps={{ shrink: true }}
-            value={editedTask.dueDate}
-            onChange={handleInputChange}
-          />
+        label="Due Date"
+        name="dueDate"
+        type="date"
+        fullWidth
+        InputLabelProps={{ shrink: true }}
+        value={editedTask.dueDate ? editedTask.dueDate.slice(0, 10) : ''}
+        onChange={handleInputChange}
+          />       
           <FormControl fullWidth>
             <InputLabel>Status</InputLabel>
             <Select
-              value={editedTask.status}
+              value={editedTask.status || ''}
               label="Status"
               onChange={handleStatusChange}
             >
               <MenuItem value="Pending">Pending</MenuItem>
-              <MenuItem value="In-Progress">In-Progress</MenuItem>
+              <MenuItem value="In Progress">In-Progress</MenuItem>
               <MenuItem value="Completed">Completed</MenuItem>
             </Select>
           </FormControl>
         </Box>
+
+        {/* Footer Buttons */}
         <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
           <Button color="error" onClick={handleDelete}>
             Delete

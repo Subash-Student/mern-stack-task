@@ -29,7 +29,7 @@ const AuthModal = ({ open, onClose }) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login, register } = useContext(AuthContext); // Use the context
+  const { login, register } = useContext(AuthContext); 
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -41,14 +41,14 @@ const AuthModal = ({ open, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (value === 0) { // Login
+    if (value === 0) { 
       const result = await login(email, password);
       if (result.success) {
         onClose();
       } else {
         toast.error(result.error);
       }
-    } else { // Register
+    } else { 
       const result = await register(username, email, password);
       if (result.success) {
         onClose();

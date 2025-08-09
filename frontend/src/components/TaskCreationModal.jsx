@@ -1,15 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
-  Modal,
-  Box,
-  Typography,
-  TextField,
-  Button,
-  IconButton,
-  Paper,
+  Modal, Box, Typography, TextField, Button, IconButton, Paper, MenuItem
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { v4 as uuidv4 } from 'uuid';
+import { TaskContext } from '../context/TaskContext';
 
 const style = {
   position: 'absolute',
@@ -23,63 +17,43 @@ const style = {
   borderRadius: 2,
 };
 
-const TaskCreationModal = ({ open, onClose, onCreate }) => {
+const TaskCreationModal = ({ open, onClose }) => {
+  const { createTask } = useContext(TaskContext);
+
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
+  const [status, setStatus] = useState('Pending');
 
-  const handleCreate = () => {
-    if (title && description && dueDate) {
-      onCreate({
-        id: uuidv4(),
-        title,
-        description,
-        dueDate,
-        status: 'Pending',
-      });
-      setTitle('');
-      setDescription('');
-      setDueDate('');
-      onClose();
-    }
+  const handleCreate = async () => {
+    if (!title.trim()) return alert('Title is required');
+
+    await createTask({ title, description, status, dueDate });
+    setTitle('');
+    setDescription('');
+    setDueDate('');
+    setStatus('Pending');
+    onClose();
   };
 
   return (
     <Modal open={open} onClose={onClose}>
       <Paper sx={style}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography variant="h6" component="h2">
-            Create New Task
-          </Typography>
+          <Typography variant="h6">Create New Task</Typography>
           <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <TextField
-            label="Title"
-            fullWidth
-            required
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <TextField
-            label="Description"
-            fullWidth
-            multiline
-            rows={4}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <TextField
-            label="Due Date"
-            type="date"
-            fullWidth
-            required
-            InputLabelProps={{ shrink: true }}
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-          />
+          <TextField label="Title" fullWidth required value={title} onChange={(e) => setTitle(e.target.value)} />
+          <TextField label="Description" fullWidth multiline rows={4} value={description} onChange={(e) => setDescription(e.target.value)} />
+          <TextField label="Due Date" type="date" fullWidth required InputLabelProps={{ shrink: true }} value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+          <TextField select label="Status" fullWidth value={status} onChange={(e) => setStatus(e.target.value)}>
+            <MenuItem value="Pending">Pending</MenuItem>
+            <MenuItem value="In Progress">In Progress</MenuItem>
+            <MenuItem value="Completed">Completed</MenuItem>
+          </TextField>
         </Box>
         <Button variant="contained" fullWidth sx={{ mt: 3 }} onClick={handleCreate}>
           Create Task

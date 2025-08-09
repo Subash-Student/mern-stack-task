@@ -18,7 +18,7 @@ const TaskCard = ({ task, onClick }) => {
     switch (status) {
       case 'Pending':
         return 'primary';
-      case 'In-Progress':
+      case 'In Progress':
         return 'warning';
       case 'Completed':
         return 'success';
@@ -31,7 +31,7 @@ const TaskCard = ({ task, onClick }) => {
     switch (status) {
       case 'Pending':
         return theme.palette.primary.main;
-      case 'In-Progress':
+      case 'In Progress':
         return theme.palette.warning.main;
       case 'Completed':
         return theme.palette.success.main;
@@ -46,9 +46,9 @@ const TaskCard = ({ task, onClick }) => {
   return (
     <Box
       sx={{
-        perspective: '1000px', // Needed for 3D effect
+        perspective: '1000px', 
         width: 250,
-        height: 200
+        height: 170
       }}
       onClick={() => onClick(task)}
       onMouseEnter={() => setIsHovered(true)}
@@ -64,7 +64,7 @@ const TaskCard = ({ task, onClick }) => {
           transform: isHovered ? 'rotateY(180deg)' : 'rotateY(0deg)',
         }}
       >
-        {/* Front Side */}
+        
         <Card
           sx={{
             position: 'absolute',
@@ -79,24 +79,54 @@ const TaskCard = ({ task, onClick }) => {
           onClick={() => onClick(task)}
         >
           <CardContent>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <Typography variant="subtitle1" component="h3" fontWeight="bold">
-                {task.title}
-              </Typography>
-              <Chip label={task.status} color={statusColor} size="small" />
-            </Box>
-            <Box sx={{ mt: 'auto', pt: 2 }}>
-              <Typography variant="caption" color="text.secondary" display="block">
-                Created: {createdDate}
-              </Typography>
-              <Typography variant="caption" color="text.secondary" display="block">
-                Updated: {updatedDate}
-              </Typography>
-            </Box>
-          </CardContent>
+ 
+  <Typography
+    variant="subtitle1"
+    component="h3"
+    fontWeight="bold"
+    sx={{
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      display: 'block'
+    }}
+    title={task.title} 
+  >
+    {task.title}
+  </Typography>
+
+  
+  <Chip
+    label={task.status}
+    color={statusColor}
+    size="small"
+    sx={{ mt: 1 }}
+  />
+
+ 
+  <Box sx={{ mt: 'auto', pt: 2 }}>
+    <Typography
+      variant="body2"
+      sx={{
+        color: theme.palette.error.main,
+        fontWeight: 'bold',
+        mb: 0.5
+      }}
+    >
+      Due: {task.dueDate.slice(0, 10)}
+    </Typography>
+    <Typography variant="caption" color="text.secondary" display="block">
+      Created: {createdDate}
+    </Typography>
+    <Typography variant="caption" color="text.secondary" display="block">
+      Updated: {updatedDate}
+    </Typography>
+  </Box>
+</CardContent>
+
         </Card>
 
-        {/* Back Side */}
+        
         <Card
           sx={{
             position: 'absolute',

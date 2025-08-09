@@ -1,25 +1,28 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Box, Fab, Grid, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DashboardHeader from '../components/DashboardHeader';
 import TaskCard from '../components/TaskCard';
 import TaskModal from '../components/TaskModal';
 import TaskCreationModal from '../components/TaskCreationModal';
-import { dummyTasks } from '../dummyData';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { TaskContext } from '../context/TaskContext';
 
 const DashboardPage = () => {
   const navigate = useNavigate();
-  const [tasks, setTasks] = useState(dummyTasks);
   const [selectedTask, setSelectedTask] = useState(null);
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [isCreationModalOpen, setIsCreationModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Get filter options from TaskContext
-  const { filterOption } = useContext(TaskContext);
+  
+  const { filterOption, tasks, setTasks, getAllTasks } = useContext(TaskContext);
+
+  
+  useEffect(() => {
+    getAllTasks();
+  }, []);
 
   const handleTaskClick = (task) => {
     setSelectedTask(task);
@@ -32,11 +35,11 @@ const DashboardPage = () => {
   };
 
   const handleSaveTask = (updatedTask) => {
-    setTasks(tasks.map(task => (task.id === updatedTask.id ? updatedTask : task)));
+    setTasks(tasks.map(task => (task._id === updatedTask._id ? updatedTask : task)));
   };
 
   const handleDeleteTask = (taskId) => {
-    setTasks(tasks.filter(task => task.id !== taskId));
+    setTasks(tasks.filter(task => task._id !== taskId));
   };
 
   const handleCreateTask = (newTaskData) => {
@@ -52,19 +55,16 @@ const DashboardPage = () => {
     setSearchQuery(query.toLowerCase());
   };
 
-  // Apply both search and filter
+ 
   const filteredTasks = tasks.filter(task => {
-    const matchesSearch =
-      task.title.toLowerCase().includes(searchQuery) ||
-      task.description.toLowerCase().includes(searchQuery);
-
+    
     const matchesStatus =
       !filterOption.status || task.status === filterOption.status;
 
     const matchesDueDate =
-      !filterOption.dueDate || task.dueDate === filterOption.dueDate;
+      !filterOption.dueDate || task.dueDate.slice(0, 10) === filterOption.dueDate;
 
-    return matchesSearch && matchesStatus && matchesDueDate;
+    return   matchesStatus && matchesDueDate;
   });
 
   return (
@@ -78,7 +78,7 @@ const DashboardPage = () => {
         <Grid container spacing={3}>
           {filteredTasks.length > 0 ? (
             filteredTasks.map((task) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={task.id}>
+              <Grid item xs={12} sm={6} md={4} lg={3} key={task._id}>
                 <TaskCard task={task} onClick={handleTaskClick} />
               </Grid>
             ))

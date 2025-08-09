@@ -6,11 +6,11 @@ import { createTask, deleteTask, getTasks, updateTask } from "../controller/task
 const taskRouter = express.Router();
 
 taskRouter.route('/')
-    .get(protect,getTasks )       // Protected route to get all tasks
-    .post(protect, createTask);  // Protected route to create a new task
+    .get(protect,getTasks )      
+    .post(protect, createTask);  
 
 taskRouter.route('/:id')
-    .put(protect, updateTask)     // Protected route to update a task
-    .delete(protect, deleteTask); // Protected route to delete a task
+    .put(protect, updateTask)     
+    .delete( deleteTask); 
 
 export default taskRouter;

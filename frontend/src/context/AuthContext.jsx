@@ -2,19 +2,19 @@ import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import {toast} from "react-toastify"
-// Create the context
+
 export const AuthContext = createContext();
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-// Create the provider component
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(sessionStorage.getItem("token"));
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Check for an existing session on app load
+
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {

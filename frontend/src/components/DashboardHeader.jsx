@@ -19,11 +19,11 @@ import {
   TextField
 } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import RefreshIcon from '@mui/icons-material/Refresh'; // ✅ added
+import RefreshIcon from '@mui/icons-material/Refresh'; 
 import { TaskContext } from '../context/TaskContext';
 
 const DashboardHeader = () => {
-  const { user, logOut, setFilterOption } = useContext(TaskContext); 
+  const { user, logout, setFilterOption } = useContext(TaskContext); 
   const [anchorEl, setAnchorEl] = useState(null);
   const [filterOpen, setFilterOpen] = useState(false);
   const [filters, setFilters] = useState({
@@ -32,11 +32,11 @@ const DashboardHeader = () => {
   });
   const open = Boolean(anchorEl);
 
-  // User Menu
+ 
   const handleMenu = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
 
-  // Filter Modal
+ 
   const handleFilterOpen = () => setFilterOpen(true);
   const handleFilterClose = () => setFilterOpen(false);
 
@@ -49,7 +49,7 @@ const DashboardHeader = () => {
     handleFilterClose();
   };
 
-  // ✅ Reset Filters
+ 
   const handleResetFilters = () => {
     const resetValues = { status: '', dueDate: '' };
     setFilters(resetValues);
@@ -64,7 +64,7 @@ const DashboardHeader = () => {
             TaskFlow
           </Typography>
 
-          {/* Filter Button */}
+         
           <IconButton
             color="primary"
             sx={{ bgcolor: 'grey.200', '&:hover': { bgcolor: 'grey.300' }, mr: 1 }}
@@ -73,7 +73,7 @@ const DashboardHeader = () => {
             <FilterListIcon />
           </IconButton>
 
-          {/* ✅ Reset Button */}
+          
           <IconButton
             color="secondary"
             sx={{ bgcolor: 'grey.200', '&:hover': { bgcolor: 'grey.300' }, mr: 2 }}
@@ -82,10 +82,10 @@ const DashboardHeader = () => {
             <RefreshIcon />
           </IconButton>
 
-          {/* Avatar Menu */}
+          
           <IconButton size="large" onClick={handleMenu} color="inherit">
             <Avatar>
-              {user?.userName ? user.userName.charAt(0).toUpperCase() : 'U'}
+              {user?.username ? user.username.charAt(0).toUpperCase() : 'U'}
             </Avatar>
           </IconButton>
           <Menu
@@ -101,17 +101,17 @@ const DashboardHeader = () => {
               horizontal: 'right',
             }}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={logOut}>Logout</MenuItem>
+      
+            <MenuItem onClick={logout}>Logout</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
 
-      {/* Filter Modal */}
+      
       <Dialog open={filterOpen} onClose={handleFilterClose}>
         <DialogTitle>Filter Tasks</DialogTitle>
         <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
-          {/* Filter by Status */}
+          
           <FormControl fullWidth>
             <InputLabel>Status</InputLabel>
             <Select
@@ -121,12 +121,12 @@ const DashboardHeader = () => {
             >
               <SelectItem value="">All</SelectItem>
               <SelectItem value="Pending">Pending</SelectItem>
-              <SelectItem value="In-Progress">In-Progress</SelectItem>
+              <SelectItem value="In Progress">In-Progress</SelectItem>
               <SelectItem value="Completed">Completed</SelectItem>
             </Select>
           </FormControl>
 
-          {/* Filter by Due Date */}
+          
           <TextField
             type="date"
             label="Due Date"
