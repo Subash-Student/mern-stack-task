@@ -1,16 +1,26 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
+import { AuthContext } from '../context/AuthContext';
 
-const Header = ({ onLoginClick }) => {
+const Header = ({ onAuthClick }) => {
+  const { user, logout } = useContext(AuthContext);
+
   return (
     <AppBar position="static" color="transparent" elevation={0}>
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
           TaskFlow
         </Typography>
-        <Button color="inherit" onClick={onLoginClick}>
-          Register
-        </Button>
+
+        {user ? (
+          <Button color="inherit" onClick={logout}>
+            Logout
+          </Button>
+        ) : (
+          <Button color="inherit" onClick={onAuthClick}>
+            Login / Register
+          </Button>
+        )}
       </Toolbar>
     </AppBar>
   );

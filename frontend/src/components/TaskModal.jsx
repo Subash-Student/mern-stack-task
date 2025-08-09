@@ -15,7 +15,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import { TaskContext } from '../context/TaskContext';
 
-
+// Modal style config
 const style = {
   position: 'absolute',
   top: '50%',
@@ -29,9 +29,13 @@ const style = {
 };
 
 const TaskModal = ({ open, onClose, task }) => {
+  // Access update/delete functions from context
   const { updateTask, deleteTask } = useContext(TaskContext);
+
+  // Local state for editing the task
   const [editedTask, setEditedTask] = useState(task || {});
 
+  // Sync modal state when a new task is passed
   useEffect(() => {
     if (task) {
       setEditedTask(task);
@@ -40,29 +44,35 @@ const TaskModal = ({ open, onClose, task }) => {
 
   if (!editedTask) return null;
 
+  // Handle text input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedTask((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Handle dropdown status change
   const handleStatusChange = (e) => {
     setEditedTask((prev) => ({ ...prev, status: e.target.value }));
   };
 
+  // Save updated task
   const handleSave = async () => {
-    await updateTask(editedTask._id,editedTask);
+    await updateTask(editedTask._id, editedTask);
     onClose();
   };
 
+  // Delete task
   const handleDelete = async () => {
     await deleteTask(editedTask._id);
     onClose();
   };
-console.log(editedTask)
+
+  console.log(editedTask); // Debug: check updated values
+
   return (
     <Modal open={open} onClose={onClose}>
       <Paper sx={style}>
-        {/* Header */}
+        {/* Modal Header */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
           <Typography variant="h5" component="h2">
             Edit Task
@@ -72,7 +82,7 @@ console.log(editedTask)
           </IconButton>
         </Box>
 
-        
+        {/* Form Fields */}
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <TextField
             label="Title"
@@ -91,14 +101,14 @@ console.log(editedTask)
             onChange={handleInputChange}
           />
           <TextField
-        label="Due Date"
-        name="dueDate"
-        type="date"
-        fullWidth
-        InputLabelProps={{ shrink: true }}
-        value={editedTask.dueDate ? editedTask.dueDate.slice(0, 10) : ''}
-        onChange={handleInputChange}
-          />       
+            label="Due Date"
+            name="dueDate"
+            type="date"
+            fullWidth
+            InputLabelProps={{ shrink: true }}
+            value={editedTask.dueDate ? editedTask.dueDate.slice(0, 10) : ''}
+            onChange={handleInputChange}
+          />
           <FormControl fullWidth>
             <InputLabel>Status</InputLabel>
             <Select

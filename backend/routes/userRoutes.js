@@ -1,11 +1,13 @@
 import express from "express";
-import { loginUser, registerUser } from "../controller/userController.js";
-import { validateLoginUser, validateRegisterUser } from "../middleware/validateMiddleware.js";
-
+import { loginUser, registerUser } from "../controller/userController.js"; // User controller functions
+import { validateLoginUser, validateRegisterUser } from "../middleware/validateMiddleware.js"; // Input validation
 
 const userRouter = express.Router();
 
-userRouter.post('/register',validateRegisterUser, registerUser);
-userRouter.post('/login',validateLoginUser, loginUser);
+// Register new user
+userRouter.post('/register', validateRegisterUser, registerUser);
+
+// Login existing user
+userRouter.post('/login', validateLoginUser, loginUser);
 
 export default userRouter;

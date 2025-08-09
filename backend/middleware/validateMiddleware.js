@@ -1,8 +1,7 @@
-import Joi from "joi";
+import Joi from "joi"; // Import Joi for schema validation
 
-
+// User registration validation schema
 const registerSchema = Joi.object({
-   
     username: Joi.string().min(3).required().messages({
         'string.min': 'Username must be at least 3 characters long.',
         'any.required': 'Username is required.',
@@ -16,8 +15,9 @@ const registerSchema = Joi.object({
         'any.required': 'Password is required.',
     }),
 });
+
+// User login validation schema
 const loginSchema = Joi.object({
-   
     email: Joi.string().email({ tlds: { allow: false } }).required().messages({
         'string.email': 'Please enter a valid email address.',
         'any.required': 'Email is required.',
@@ -28,13 +28,13 @@ const loginSchema = Joi.object({
     }),
 });
 
-
+// Task creation/update validation schema
 const taskSchema = Joi.object({
     title: Joi.string().min(3).required().messages({
         'string.min': 'Title must be at least 3 characters long.',
         'any.required': 'Title is required.',
     }),
-    description: Joi.string().allow('').optional(), 
+    description: Joi.string().allow('').optional(), // Optional description
     status: Joi.string().valid('pending', 'in-progress', 'completed').optional().messages({
         'any.only': 'Status must be one of: pending, in-progress, completed.',
     }),
@@ -43,7 +43,7 @@ const taskSchema = Joi.object({
     }),
 });
 
-
+// Middleware: Validate register request body
 export const validateRegisterUser = (req, res, next) => {
     const { error } = registerSchema.validate(req.body);
     if (error) {
@@ -51,6 +51,8 @@ export const validateRegisterUser = (req, res, next) => {
     }
     next();
 };
+
+// Middleware: Validate login request body
 export const validateLoginUser = (req, res, next) => {
     const { error } = loginSchema.validate(req.body);
     if (error) {
@@ -59,7 +61,7 @@ export const validateLoginUser = (req, res, next) => {
     next();
 };
 
-
+// Middleware: Validate task request body
 export const validateTask = (req, res, next) => {
     const { error } = taskSchema.validate(req.body);
     if (error) {
@@ -67,5 +69,3 @@ export const validateTask = (req, res, next) => {
     }
     next();
 };
-
-

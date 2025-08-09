@@ -4,8 +4,9 @@ import { Box, CircularProgress } from '@mui/material';
 import { AuthContext } from '../../../context/AuthContext';
 
 const ProtectedRoute = () => {
-  const { token, loading } = useContext(AuthContext);
+  const { token, loading } = useContext(AuthContext); // Get auth state
 
+  // Show loader while checking auth
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -14,7 +15,7 @@ const ProtectedRoute = () => {
     );
   }
 
-  
+  // If logged in → show page, else redirect
   return !!token ? <Outlet /> : <Navigate to="/" />;
 };
 

@@ -2,24 +2,26 @@ import React, { useContext, useState } from 'react';
 import { Box, Typography, Button, TextField, Paper } from '@mui/material';
 import img from '../assets/img.jpg';
 import { AuthContext } from '../context/AuthContext';
-import {toast} from "react-toastify"
+import { toast } from "react-toastify";
 
 const Hero = () => {
+  // Local state for form inputs
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const {login} = useContext(AuthContext);
+  // Access login function from context
+  const { login } = useContext(AuthContext);
 
-  const handleSignUp = async(e) => {
-
-    e.preventDefault();
+  // Handle sign-up/login form submission
+  const handleSignUp = async (e) => {
+    e.preventDefault(); // Prevent page reload
 
     const result = await login(email, password);
-      if (result.success) {
-        onClose();
-      } else {
-        toast.error(result.error);
-      }
+    if (result.success) {
+      onClose(); // Close form/modal if login is successful
+    } else {
+      toast.error(result.error); // Show error toast
+    }
   };
 
   return (
@@ -34,6 +36,7 @@ const Hero = () => {
         p: 4,
       }}
     >
+      {/* Left Section: Text + Image */}
       <Box sx={{ maxWidth: { xs: '100%', md: '50%' } }}>
         <Typography variant="h2" component="h1" gutterBottom>
           Organize Your Life. Achieve Your Goals.
@@ -41,7 +44,6 @@ const Hero = () => {
         <Typography variant="h5" color="text.secondary" paragraph>
           Simple and powerful task management to help you stay on track.
         </Typography>
-       
         <Box
           component="img"
           src={img}
@@ -49,11 +51,18 @@ const Hero = () => {
           sx={{ display: { xs: 'none', md: 'block' }, maxWidth: '100%', mt: 4 }}
         />
       </Box>
+
+      {/* Right Section: Quick Sign-Up Form */}
       <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
         <Typography variant="h6" align="center" gutterBottom>
           Quick Sign Up
         </Typography>
-        <Box component="form" onSubmit={handleSignUp} sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Box
+          component="form"
+          onSubmit={handleSignUp}
+          sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}
+        >
+          {/* Email Field */}
           <TextField
             label="Email"
             type="email"
@@ -62,6 +71,8 @@ const Hero = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+
+          {/* Password Field */}
           <TextField
             label="Password"
             type="password"
@@ -70,6 +81,8 @@ const Hero = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+
+          {/* Submit Button */}
           <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
             Get Started
           </Button>

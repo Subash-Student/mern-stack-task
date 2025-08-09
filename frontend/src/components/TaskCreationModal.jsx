@@ -5,6 +5,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import { TaskContext } from '../context/TaskContext';
 
+// Modal styling
 const style = {
   position: 'absolute',
   top: '50%',
@@ -18,17 +19,20 @@ const style = {
 };
 
 const TaskCreationModal = ({ open, onClose }) => {
-  const { createTask } = useContext(TaskContext);
+  const { createTask } = useContext(TaskContext); // Access createTask from context
 
+  // Form state
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [status, setStatus] = useState('Pending');
 
+  // Create task handler
   const handleCreate = async () => {
-    if (!title.trim()) return alert('Title is required');
+    if (!title.trim()) return alert('Title is required'); // Validation
 
-    await createTask({ title, description, status, dueDate });
+    await createTask({ title, description, status, dueDate }); // Save task
+    // Reset form
     setTitle('');
     setDescription('');
     setDueDate('');
@@ -39,12 +43,15 @@ const TaskCreationModal = ({ open, onClose }) => {
   return (
     <Modal open={open} onClose={onClose}>
       <Paper sx={style}>
+        {/* Header */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
           <Typography variant="h6">Create New Task</Typography>
           <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
         </Box>
+
+        {/* Form Fields */}
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <TextField label="Title" fullWidth required value={title} onChange={(e) => setTitle(e.target.value)} />
           <TextField label="Description" fullWidth multiline rows={4} value={description} onChange={(e) => setDescription(e.target.value)} />
@@ -55,6 +62,8 @@ const TaskCreationModal = ({ open, onClose }) => {
             <MenuItem value="Completed">Completed</MenuItem>
           </TextField>
         </Box>
+
+        {/* Submit Button */}
         <Button variant="contained" fullWidth sx={{ mt: 3 }} onClick={handleCreate}>
           Create Task
         </Button>
